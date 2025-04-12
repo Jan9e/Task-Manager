@@ -1,7 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import LoginPage from './LoginPage';
 
 const SignupPage = () => {
+  const [name, setName]= useState('');
+  const [email, setEmail]= useState('');
+  const [password, setPassword]= useState('');
+  const [error, setError]= useState('');
+  const [message, setMessage]= useState('');
+
   const signinBtnRef = useRef(null);
   const signupBtnRef = useRef(null);
   const containerRef = useRef(null);
@@ -28,16 +35,49 @@ const SignupPage = () => {
     };
   }, []);
 
+  //Handle the submission
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
+
+    setError('');
+    setMessage('');
+
+    if(!name || !email || !password){
+      setError('All fields are required');
+      return;
+    }
+
+    try{
+      const response = await axios.post('http://localhost:3000/register', {
+        name,
+        email,
+        password
+      });
+      setMessage('User registered successfully');
+    }catch(err){
+      if(err.response){
+        setError(err.response.data.message);
+      }else{
+        setError('An error occured. Please try again later.');
+      }
+    }
+  };
+
   return (
     <div className='container' ref={containerRef}>
       {/* Sign Up Form */}
       <div className='form-container sign-up'>
-        <form>
+        <form onSubmit={handleSubmit}>
           <h1>Create Account</h1>
-          <input type='text' placeholder='Name' />
-          <input type='email' placeholder='Email' />
-          <input type='password' placeholder='Password' />
-          <button>Sign Up</button>
+
+          {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+          {message && <p style={{ color: 'green', marginBottom: '10px' }}>{message}</p>}
+
+          <input type='text' placeholder='Name' value={name} onChange={(e)=> setName(e.target.value)}/>
+          <input type='email' placeholder='Email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
+          <input type='password' placeholder='Password' value={password} onChange={(e)=>setPassword(e.target.value)}/>
+          <button type='submit'>Sign Up</button>
         </form>
       </div>
 
