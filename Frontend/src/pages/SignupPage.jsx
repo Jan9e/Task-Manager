@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import LoginPage from './LoginPage';
+import '../styles/loginSignup.css'
 
 const SignupPage = () => {
   const [name, setName]= useState('');
