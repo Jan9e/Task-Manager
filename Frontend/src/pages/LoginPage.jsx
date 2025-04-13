@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import '../styles/loginSignup.css'
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginPage = () => {
   
@@ -8,6 +10,7 @@ const LoginPage = () => {
   const [password, setPassword]= useState('');
   const [error, setError]= useState('');
   const [message, setMessage]= useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
@@ -25,7 +28,9 @@ const LoginPage = () => {
         email,
         password
       });
+      localStorage.setItem('token', response.data.token);
       setMessage('Login Successful');
+      navigate('/dashboard');
     }catch(err){
       if(err.response){
         setError(err.response.data.message);

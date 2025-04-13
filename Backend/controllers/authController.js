@@ -37,7 +37,7 @@ const loginUser = async (req, res)=>{
 
     const user = await prisma.user.findUnique({where: {email}});
 
-    if(!user) return res.status(400).json({message:'Email doesn/t exists.'});
+    if(!user) return res.status(400).json({message:'Email does not exists.'});
 
     const isMatch = await bcrypt.compare(password, user.password);
     if(!isMatch) return res.status(400).json({message: 'Incorrect password'});
