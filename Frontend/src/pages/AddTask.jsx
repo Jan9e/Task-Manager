@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddTask = () => {
+const AddTask = ({fetchTasks}) => {
     const [title, setTitle]= useState('');
     const [description, setDescription]= useState('');
 
@@ -21,6 +21,7 @@ const AddTask = () => {
         alert("Task Added successfully.");
         setTitle('');
         setDescription('');
+        fetchTasks();
         }catch(error){
             console.error('Error:', error);
             alert(error.response?.data?.error || "Something went wrong");
