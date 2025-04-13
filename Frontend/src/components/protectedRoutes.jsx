@@ -3,7 +3,7 @@ import { isLoggedIn } from '../utils/auth.js';
 
 const ProtectedRoute = ({ children }) => {
   if (!isLoggedIn()) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
   return children;
 };
