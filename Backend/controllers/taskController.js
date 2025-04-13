@@ -23,4 +23,21 @@ const createTask = async (req, res)=>{
     }
 };
 
-module.exports={createTask};
+const getTasks=async(req, res)=>{
+    try{
+        const tasks = await prisma.task.findMany({
+            where:{
+                userId:req.userId,
+            },
+            orderBy:{
+                createdAt: 'desc',
+            },
+        });
+        res.json({tasks});
+    }catch(error){
+        console.error(error);
+        res.status(500).json({error: 'Failed to fetch tasks'});
+    }
+};
+
+module.exports={createTask, getTasks};
