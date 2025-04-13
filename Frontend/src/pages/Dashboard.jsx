@@ -14,7 +14,7 @@ const Dashboard = () => {
   const fetchTasks = async()=>{
     const token = localStorage.getItem('token');
     try{
-      const res = await axios.get('http://localhost:3000/tasks',{
+      const res = await axios.get('https://task-manager-backend-6tyc.onrender.com/tasks',{
         headers:{
           Authorization: `Bearer ${token}`,
         },
@@ -29,7 +29,7 @@ const Dashboard = () => {
   const markAsCompleted = async(taskId)=>{
     const token = localStorage.getItem('token');
     try{
-      await axios.put(`http://localhost:3000/tasks/${taskId}`,{
+      await axios.put(`https://task-manager-backend-6tyc.onrender.com/tasks/${taskId}`,{
         completed:true,
       },{
         headers:{
@@ -47,7 +47,7 @@ const Dashboard = () => {
     const token = localStorage.getItem('token');
     if(!window.confirm('Are you sure you want to delete this task?')) return;
     try{
-      await axios.delete(`http://localhost:3000/tasks/${taskId}`,{
+      await axios.delete(`https://task-manager-backend-6tyc.onrender.com/tasks/${taskId}`,{
         headers:{
           Authorization: `Bearer ${token}`,
         },
