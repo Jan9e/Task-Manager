@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaSignOutAlt , FaTrash } from 'react-icons/fa';
 import '../styles/dashboard.css';
 import AddTask from './AddTask';
 import axios from 'axios';
@@ -8,6 +8,9 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState('all');
   const [error, setError]= useState('');
+  const [name, setName] = useState('');
+  const [showLogout, setShowLogout] = useState(false);
+
   const fetchTasks = async()=>{
     const token = localStorage.getItem('token');
     try{
@@ -22,8 +25,52 @@ const Dashboard = () => {
       setError('Failed to fetch tasks');
     }
   };
+
+  const markAsCompleted = async(taskId)=>{
+    const token = localStorage.getItem('token');
+    try{
+      await axios.put(`http://localhost:3000/tasks/${taskId}`,{
+        completed:true,
+      },{
+        headers:{
+          Authorization:`Bearer ${token}`,
+        },
+      });
+      fetchTasks();
+    }catch(error){
+      console.error(error);
+      alert('Failed to mark task as completed');
+    }
+  };
+
+  const handleDelete= async(taskId)=>{
+    const token = localStorage.getItem('token');
+    if(!window.confirm('Are you sure you want to delete this task?')) return;
+    try{
+      await axios.delete(`http://localhost:3000/tasks/${taskId}`,{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchTasks();
+    }catch(error){
+      console.error(error);
+      alert('Failed to delete task');
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    window.location.href = '/';
+  };
+
   useEffect(()=>{
     fetchTasks();
+    const storedName = localStorage.getItem('username');
+    if (storedName) {
+    setName(storedName);
+    }
   }, []);
 
   const filteredTasks = tasks.filter(task => {
@@ -33,8 +80,23 @@ const Dashboard = () => {
   });
 
   return (
-    <div className='dashboardContainer'>
-    <AddTask/>
+    <>
+      <div className='nav-bar'>
+      <h2>Task Manager</h2>
+      <div className='user-info'>
+          <h4 onClick={() => setShowLogout(!showLogout)}>{`Hello, ${name}`}</h4>
+          {showLogout && (
+            <div className='logout-dropdown'>
+              <button className='logout-button' onClick={handleLogout}>
+                <FaSignOutAlt /> Logout
+              </button>
+            </div>
+          )}
+        </div>
+
+      </div>
+    <div className='dashboardContainer'>  
+    <AddTask fetchTasks={fetchTasks} />
     <div className='dashboard'>
     <h2 className='dashboard-header'>Your Tasks</h2>
 
@@ -59,10 +121,9 @@ const Dashboard = () => {
           </div>
           <div className='task-actions'>
           {filter === 'in-progress' && (
-            <input className='checkbox' type='checkbox'/>
+            <input className='checkbox' type='checkbox' onChange={()=> markAsCompleted(task.id)} title='Mark as completed'/>
           )}
-          <FaEdit className='task-edit'/>
-          <FaTrash className='task-delete'/>
+          <FaTrash className='task-delete'onClick={()=>handleDelete(task.id)} title='delete'/>
           </div>
         </div>
       ))
@@ -70,6 +131,7 @@ const Dashboard = () => {
   </div>
   </div>
     </div>
+    </>
   )
 }
 

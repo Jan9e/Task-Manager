@@ -76,7 +76,7 @@ const SignupPage = () => {
           {message && <p style={{ color: 'green', marginBottom: '10px' }}>{message}</p>}
 
           <input type='text' placeholder='Name' value={name} onChange={(e)=> setName(e.target.value)}/>
-          <input type='email' placeholder='Email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
+          <input type='text' placeholder='Email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
           <input type='password' placeholder='Password' value={password} onChange={(e)=>setPassword(e.target.value)}/>
           <button type='submit'>Sign Up</button>
         </form>

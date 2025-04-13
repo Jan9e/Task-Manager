@@ -29,6 +29,7 @@ const LoginPage = () => {
         password
       });
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', response.data.name);
       setMessage('Login Successful');
       navigate('/dashboard');
     }catch(err){

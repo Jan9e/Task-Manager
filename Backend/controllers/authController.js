@@ -12,6 +12,9 @@ const registerUser = async(req, res)=>{
     if (!emailRegex.test(email)) {
         return res.status(400).json({ message: 'Invalid email format' });
     }
+    if (password.length < 6) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+      }
 
     const existingUser = await prisma.user.findUnique({where:{email}});
 
@@ -43,7 +46,7 @@ const loginUser = async (req, res)=>{
     if(!isMatch) return res.status(400).json({message: 'Incorrect password'});
 
     const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET, {expiresIn:'1d'});
-    res.json({message: 'Login successful', token});
+    res.json({message: 'Login successful', token, name:user.name});
 };
 
 module.exports = {registerUser, loginUser};
