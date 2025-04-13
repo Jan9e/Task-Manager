@@ -14,7 +14,7 @@ app.use(cors({
 }));
 
 app.use('/', authRoutes);
-app.use('/dashboard', taskRoutes);
+app.use('/', taskRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
