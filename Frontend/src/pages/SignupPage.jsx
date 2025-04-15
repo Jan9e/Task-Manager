@@ -50,7 +50,7 @@ const SignupPage = () => {
     }
 
     try{
-      const response = await axios.post('https://task-manager-backend-6tyc.onrender.com/register', {
+      const response = await axios.post('http://localhost:3000/register', {
         name,
         email,
         password
