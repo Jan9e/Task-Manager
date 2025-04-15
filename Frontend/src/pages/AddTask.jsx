@@ -9,7 +9,7 @@ const AddTask = ({fetchTasks}) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
         try{
-            const response = await axios.post('https://task-manager-backend-6tyc.onrender.com/tasks',{
+            const response = await axios.post('http://localhost:3000/tasks',{
                 title,
                 description
             },
